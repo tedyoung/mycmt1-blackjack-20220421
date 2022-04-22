@@ -19,8 +19,30 @@ public class Game {
     private final List<Card> playerHand = new ArrayList<>();
 
     public static void main(String[] args) {
-        Game game = new Game();
+        displayWelcomeScreen();
 
+        waitForUserToContinue();
+
+        playGame();
+
+        resetScreen();
+    }
+
+    private static void playGame() {
+        Game game = new Game();
+        game.initialDeal();
+        game.play();
+    }
+
+    private static void resetScreen() {
+        System.out.println(ansi().reset());
+    }
+
+    private static void waitForUserToContinue() {
+        System.console().readLine();
+    }
+
+    private static void displayWelcomeScreen() {
         AnsiConsole.systemInstall();
         System.out.println(ansi()
                                    .bgBright(Ansi.Color.WHITE)
@@ -32,14 +54,6 @@ public class Game {
         System.out.println(ansi()
                                    .cursor(3, 1)
                                    .fgBrightBlack().a("Hit [ENTER] to start..."));
-
-        System.console().readLine();
-
-
-        game.initialDeal();
-        game.play();
-
-        System.out.println(ansi().reset());
     }
 
     public Game() {
@@ -47,17 +61,47 @@ public class Game {
     }
 
     public void initialDeal() {
+        dealRoundOfCards();
+        dealRoundOfCards();
+    }
 
-        // deal first round of cards, players first
-        playerHand.add(deck.draw());
-        dealerHand.add(deck.draw());
-
-        // deal next round of cards
+    private void dealRoundOfCards() {
+        // players get dealt cards first due to rules of Blackjack
+        // Can we enforce/answer the question "Why" with a test?
         playerHand.add(deck.draw());
         dealerHand.add(deck.draw());
     }
 
     public void play() {
+        boolean playerBusted = playerTurn();
+
+        dealerTurn(playerBusted);
+
+        displayFinalGameState();
+
+        if (playerBusted) {
+            System.out.println("You Busted, so you lose.  💸");
+        } else if (handValueOf(dealerHand) > 21) {
+            System.out.println("Dealer went BUST, Player wins! Yay for you!! 💵");
+        } else if (handValueOf(dealerHand) < handValueOf(playerHand)) {
+            System.out.println("You beat the Dealer! 💵");
+        } else if (handValueOf(dealerHand) == handValueOf(playerHand)) {
+            System.out.println("Push: You tie with the Dealer. 💸");
+        } else {
+            System.out.println("You lost to the Dealer. 💸");
+        }
+    }
+
+    private void dealerTurn(boolean playerBusted) {
+        // Dealer makes its choice automatically based on a simple heuristic (<=16, hit, 17>=stand)
+        if (!playerBusted) {
+            while (handValueOf(dealerHand) <= 16) {
+                dealerHand.add(deck.draw());
+            }
+        }
+    }
+
+    private boolean playerTurn() {
         // get Player's decision: hit until they stand, then they're done (or they go bust)
         boolean playerBusted = false;
         while (!playerBusted) {
@@ -75,27 +119,7 @@ public class Game {
                 System.out.println("You need to [H]it or [S]tand");
             }
         }
-
-        // Dealer makes its choice automatically based on a simple heuristic (<=16, hit, 17>=stand)
-        if (!playerBusted) {
-            while (handValueOf(dealerHand) <= 16) {
-                dealerHand.add(deck.draw());
-            }
-        }
-
-        displayFinalGameState();
-
-        if (playerBusted) {
-            System.out.println("You Busted, so you lose.  💸");
-        } else if (handValueOf(dealerHand) > 21) {
-            System.out.println("Dealer went BUST, Player wins! Yay for you!! 💵");
-        } else if (handValueOf(dealerHand) < handValueOf(playerHand)) {
-            System.out.println("You beat the Dealer! 💵");
-        } else if (handValueOf(dealerHand) == handValueOf(playerHand)) {
-            System.out.println("Push: You tie with the Dealer. 💸");
-        } else {
-            System.out.println("You lost to the Dealer. 💸");
-        }
+        return playerBusted;
     }
 
     public int handValueOf(List<Card> hand) {

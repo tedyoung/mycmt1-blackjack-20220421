@@ -34,6 +34,7 @@ public class Card {
         lines[6] = "└─────────┘";
 
         Ansi.Color cardColor = "♥♦".contains(suit) ? Ansi.Color.RED : Ansi.Color.BLACK;
+
         return ansi()
                 .fg(cardColor).toString()
                 + String.join(ansi().cursorDown(1)
