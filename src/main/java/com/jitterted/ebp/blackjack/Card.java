@@ -8,9 +8,8 @@ public class Card {
     private final Suit suit;
     private final String rank;
 
-    // Card(Suit suit, String rank)
-    public Card(String symbol, String rank) {
-        this.suit = Suit.from(symbol);
+    public Card(Suit suit, String rank) {
+        this.suit = suit;
         this.rank = rank;
     }
 
@@ -34,7 +33,7 @@ public class Card {
         lines[5] = String.format("│       %s%s│", rank.equals("10") ? "" : " ", rank);
         lines[6] = "└─────────┘";
 
-        Ansi.Color cardColor = "♥♦".contains(suit.symbol()) ? Ansi.Color.RED : Ansi.Color.BLACK;
+        Ansi.Color cardColor = suit.isRed() ? Ansi.Color.RED : Ansi.Color.BLACK;
 
         return ansi()
                 .fg(cardColor).toString()
