@@ -77,16 +77,25 @@ public class Game {
 
         displayFinalGameState();
 
+        determineOutcome(playerBusted);
+    }
+
+    private void determineOutcome(boolean playerBusted) {
         if (playerBusted) {
             System.out.println("You Busted, so you lose.  💸");
+//            playerLoses();
         } else if (dealerHand.isBusted()) {
             System.out.println("Dealer went BUST, Player wins! Yay for you!! 💵");
+            playerWins();
         } else if (playerHand.beats(dealerHand)) {
             System.out.println("You beat the Dealer! 💵");
+            playerWins();
         } else if (playerHand.pushes(dealerHand)) {
             System.out.println("Push: You tie with the Dealer. 💸");
+//            playerPushes();
         } else {
             System.out.println("You lost to the Dealer. 💸");
+//            playerLoses();
         }
     }
 
@@ -184,7 +193,7 @@ public class Game {
     }
 
     public void playerWins() {
-
+        playerBalance += playerBetAmount * 2;
     }
 }
 
