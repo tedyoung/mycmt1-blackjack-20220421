@@ -199,6 +199,10 @@ public class Game {
     public void playerLoses() {
 
     }
+
+    public void playerPushes() {
+        playerBalance += playerBetAmount;
+    }
 }
 
 
