@@ -8,8 +8,7 @@ public class WalletBettingTest {
 
     @Test
     public void walletWithBalance12WhenBet8ThenBalanceIs4() throws Exception {
-        Wallet wallet = new Wallet();
-        wallet.addMoney(12);
+        Wallet wallet = createWalletWithAmount(12);
 
         wallet.bet(8);
 
@@ -17,7 +16,22 @@ public class WalletBettingTest {
                 .isEqualTo(12 - 8);
     }
 
+    @Test
+    public void walletWith27Bet7AndBet9thenBalanceIs11() throws Exception {
+        Wallet wallet = createWalletWithAmount(27);
 
+        wallet.bet(7);
+        wallet.bet(9);
+
+        assertThat(wallet.balance())
+                .isEqualTo(27 - 7 - 9);
+    }
+
+    private Wallet createWalletWithAmount(int startingAmount) {
+        Wallet wallet = new Wallet();
+        wallet.addMoney(startingAmount);
+        return wallet;
+    }
 
 
 }

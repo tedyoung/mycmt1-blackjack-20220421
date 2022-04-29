@@ -28,7 +28,7 @@ public class Wallet {
     }
 
     public void bet(int betAmount) {
-        balance = 12 - 8;
+        balance -= betAmount;
     }
 
 
