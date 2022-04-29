@@ -24,4 +24,22 @@ public class WalletTest {
                 .isFalse();
     }
 
+    @Test
+    public void newWalletHasZeroBalance() throws Exception {
+        Wallet wallet = new Wallet();
+
+        assertThat(wallet.balance())
+                .isZero();
+    }
+
+    @Test
+    public void walletAdd10ThenBalanceIs10() throws Exception {
+        Wallet wallet = new Wallet();
+
+        wallet.addMoney(10);
+
+        assertThat(wallet.balance())
+                .isEqualTo(10);
+    }
+
 }
