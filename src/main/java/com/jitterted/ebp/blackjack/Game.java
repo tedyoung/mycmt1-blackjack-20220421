@@ -203,6 +203,10 @@ public class Game {
     public void playerPushes() {
         playerBalance += playerBetAmount;
     }
+
+    public void playerWinsBlackjack() {
+        playerBalance += playerBetAmount * 2.5;
+    }
 }
 
 
